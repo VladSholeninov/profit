@@ -75,7 +75,14 @@
                 title: {
                     text: data.name + ' (' +  data.currency + ')'
                 },
-
+                xAxis: {
+                    type: 'datetime',
+                    labels: {
+                        formatter: function() {
+                            return moment(this.value).format("D.M.YY HH:MM");
+                        }
+                    }
+                },
                 navigation: {
                     buttonOptions: {
                         theme: {
@@ -88,7 +95,7 @@
 
                 series: [
                     {
-                        name: 'balans',
+                        name: 'Баланс',
                         data: data.totally_data,
                         tooltip: {
                             valueDecimals: 2
