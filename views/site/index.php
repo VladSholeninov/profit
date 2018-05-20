@@ -75,19 +75,27 @@
                 title: {
                     text: data.name + ' (' +  data.currency + ')'
                 },
-                plotOptions: {
-                    series: {
-                        label: {
-                            connectorAllowed: false
+
+                navigation: {
+                    buttonOptions: {
+                        theme: {
+                            style: {
+                                color: '#E0E0E0'
+                            }
                         }
-                    //    pointStart: '2015.09.15 23:26:35'
                     }
                 },
 
                 series: [
                     {
                         name: 'profit',
-                        data: data.data_chart,
+                        data: data.profit_data,
+                        tooltip: {
+                            valueDecimals: 2
+                        }
+                    },{
+                        name: 'баланс',
+                        data: data.totally_data,
                         tooltip: {
                             valueDecimals: 2
                         }

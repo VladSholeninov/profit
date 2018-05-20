@@ -74,21 +74,6 @@ class ParserRoboForexClass
     }
 
     /**
-     * Получить информацию для построения графика
-     * @return array
-     */
-    public function getDataChart()
-    {
-        $array_chart =[];
-
-        foreach ($this->data as $date => $profit){
-            $array_chart[] = [strtotime(str_replace('.', '-', $date))*1000, $profit];
-        }
-
-        return $array_chart;
-    }
-
-    /**
      * Получить полную информацию об отчете
      * @return array
      */
@@ -98,7 +83,8 @@ class ParserRoboForexClass
             'date' => $this->getDate(),
             'name' => $this->getName(),
             'currency' => $this->getCurrency(),
-            'data_chart' => $this->getDataChart()
+            'profit_data' => $this->getDataChartProfit(),
+            'totally_data' => $this->getDataChartTotally()
         ];
     }
 
@@ -118,6 +104,41 @@ class ParserRoboForexClass
                 );
             }
         }
+    }
+
+
+    /**
+     * Получить информацию для построения графика - профита
+     * @return array
+     */
+    public function getDataChartProfit()
+    {
+        $array_chart =[];
+
+        foreach ($this->data as $date => $profit){
+            $array_chart[] = [strtotime(str_replace('.', '-', $date))*1000, $profit];
+        }
+
+        return $array_chart;
+    }
+
+    /**
+     * Получить информацию для построения графика - суммы
+     * @return array
+     */
+    public function getDataChartTotally()
+    {
+        $array_chart =[];
+
+        $last_value = 0;
+        foreach ($this->data as $date => $profit){
+            if (!empty($array_chart)){
+                $last_value += $last_value + [strtotime(str_replace('.', '-', $date))*1000, $profit];
+                $array_chart[] = $last_value;
+            }
+        }
+
+        return $array_chart;
     }
 
     /**
