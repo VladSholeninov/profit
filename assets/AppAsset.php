@@ -23,6 +23,7 @@ class AppAsset extends AssetBundle
 		'//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',	
 		'//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css',			
         'css/site.css',
+        'css/bootstrap_alert.css',
 		
     ];
     public $js = [

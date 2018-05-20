@@ -67,3 +67,10 @@
 .uploader div.browser label:hover {
 	background-color: #427fed;
 }
+.demo-file-status-error{
+	color: #990000;
+}
+
+.demo-file-status-success{
+	color: #009900;
+}

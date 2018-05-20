@@ -3,10 +3,12 @@
 namespace app\controllers;
 
 use app\component\Common\LogClass;
+use app\component\Common\FileClass;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
+use yii\helpers\Json;
 use app\component\Parser\ParserClass;
 use yii\filters\VerbFilter;
 
@@ -81,7 +83,33 @@ class SiteController extends Controller
 
     public function actionUploadFile()
     {
-        
+        $result_upload = [];
+
+        if (empty($_FILES)) {
+            $result_upload = [
+                'status'  => 'error',
+                'message' => 'не загружен файл'
+            ];
+
+            return Json::encode($result_upload);
+        }
+
+        $obj_file_class = new FileClass();
+        $obj_file_class->setAllowedExtension(['html', 'htm']);
+        $obj_file_class->setAllowedSize(4);
+        $obj_file_class->setDestination($_SERVER['DOCUMENT_ROOT'] . "/web/files/");
+
+        if ($obj_file_class->isValid()) {
+            $obj_file_class->receive();
+            $result_upload['file_name'] = $obj_file_class->getNameFileOnServer();
+            $result_upload['status'] = 'ok';
+               
+        } else {
+            $result_upload['status'] = 'error';
+            $result_upload['message'] = $obj_file_class->getMessage();
+        }
+
+        return Json::encode($result_upload);
     }
 
 }

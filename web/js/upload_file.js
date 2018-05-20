@@ -22,27 +22,31 @@ $(function () {
             updateFileProgress(id, percentStr);
         },
         onUploadSuccess: function (id, data) {
-            updateFileStatus(id, 'success', 'Успешно загружено');
+            
 
             updateFileProgress(id, '0%');
             if (data.status == 'ok') {
+                
                 var input = $('<input>').attr({
                     type: 'hidden',
-                    name: 'loadFile'
-                }).val(data.name);
+                    name: 'loadFile[]'
+                }).val(data.file_name);
                 $("#demo-files").append(input.get(0));
+                updateFileStatus(id, 'success', 'Успешно загружен');
+                bsAlert.success('Файл успешно загружен');
             } else {
-                alert(data.error);
+                updateFileStatus(id, 'error', 'Ошибка загрузки');
+                bsAlert.error(data.message);
             }
         },
         onUploadError: function (id, message) {
-           alert("пожалуйста перегрузите страницу и попробуйте ещё раз");
+           bsAlert.error("пожалуйста перегрузите страницу и попробуйте ещё раз");
         },
         onFileSizeError: function (file) {
-           alert("файл с именем " + file.name + ' не должен превышать 3 Мб');
+           bsAlert.error("файл с именем " + file.name + ' не должен превышать 3 Мб');
         },
         onFileTypeError: function (file) {
-           alert("файл с именем " + file.name + 'должен быть изображением');
+           bsAlert.error("файл с именем " + file.name + ' должен иметь расширение HTML');
         }
 
     });
