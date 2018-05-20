@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
 
 class SiteController extends Controller
 {
+
     /**
      * {@inheritdoc}
      */
@@ -20,7 +21,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only'  => ['logout'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -28,7 +29,7 @@ class SiteController extends Controller
                     ],
                 ],
             ],
-            'verbs' => [
+            'verbs'  => [
                 'class' => VerbFilter::className(),
             ],
         ];
@@ -40,11 +41,11 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
+            'error'   => [
                 'class' => 'yii\web\ErrorAction',
             ],
             'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
+                'class'           => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
@@ -59,23 +60,28 @@ class SiteController extends Controller
     {
         return $this->render('index');
     }
-    
+
     public function actionGetData()
     {
         LogClass::cleare();
         LogClass::saveLog('actionGetData');
 
         $parser = new ParserClass('statement1.html');
-        
-        if ($parser->loadFile()){
+
+        if ($parser->loadFile()) {
             $report = $parser->getReportByType();
 
             $data = $report->getFullInfo();
 
             return json_encode($data);
         }
-        
+
         return false;
+    }
+
+    public function actionUploadFile()
+    {
+        
     }
 
 }

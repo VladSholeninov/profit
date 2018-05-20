@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/web/css/uploader.css"/>
+
 <script src="https://code.highcharts.com/stock/highstock.js"></script>
 <script src="https://code.highcharts.com/modules/series-label.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
@@ -8,11 +10,48 @@
 <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
 
+<!--scripts_for_upload_file-->
+<script src="/web/js/dmuploader.min.js"></script>
+<script src="/web/js/upload_file.js"></script>
+<!--end_scripts_for_upload_file-->
+
 <div class="site-index">
 
     <h1>Профит</h1>
 
     <div class="col-lg-2 left-block">
+        <!--        загрузка файла-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- D&D Zone-->
+                <div id="drag-and-drop-zone" class="uploader">
+                    <div>перетащите сюда изображение</div>
+                    <div class="or">-или-</div>
+                    <div class="browser">
+                        <label>
+                            <span>нажмите для обзора компьютера</span>
+                            <input type="file" name="file" accept="text/html"  title='Click to add File'>
+                        </label>
+                    </div>
+                </div>
+                <!-- /D&D Zone -->
+
+            </div>
+
+
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">загруженые файлы</h3>
+                    </div>
+                    <div class="panel-body demo-panel-files" id='demo-files'>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--        END^загрузка файла-->
+
     </div>
 
     <div class="main-content col-lg-10">
@@ -24,37 +63,38 @@
 
 <script>
 
-    $(function () {
+$(function () {
 
-        $.getJSON('/site/get-data', function (data) {
-            // Create the chart
-            Highcharts.setOptions({
-                lang: {
-                    loading: 'Загрузка...',
-                    months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-                    weekdays: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
-                    shortMonths: ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сент', 'Окт', 'Нояб', 'Дек'],
-                    exportButtonTitle: "Экспорт",
-                    printButtonTitle: "Печать",
-                    rangeSelectorFrom: "С",
-                    rangeSelectorTo: "По",
-                    rangeSelectorZoom: "Период",
-                    downloadPNG: 'Скачать PNG',
-                    downloadJPEG: 'Скачать JPEG',
-                    downloadPDF: 'Скачать PDF',
-                    downloadSVG: 'Скачать SVG',
-                    printChart: 'Напечатать график'
-                },
-                time: {
-                    timezone: 'Europe/Moscow'
-                }
-            });
+    $.getJSON('/site/get-data', function (data) {
+        // Create the chart
+        Highcharts.setOptions({
+            lang: {
+                loading: 'Загрузка...',
+                months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                weekdays: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
+                shortMonths: ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сент', 'Окт', 'Нояб', 'Дек'],
+                exportButtonTitle: "Экспорт",
+                printButtonTitle: "Печать",
+                rangeSelectorFrom: "С",
+                rangeSelectorTo: "По",
+                rangeSelectorZoom: "Период",
+                downloadPNG: 'Скачать PNG',
+                downloadJPEG: 'Скачать JPEG',
+                downloadPDF: 'Скачать PDF',
+                downloadSVG: 'Скачать SVG',
+                downloadCSV: 'Скачать CSV',
+                printChart: 'Напечатать график'
+            },
+            time: {
+                timezone: 'Europe/Moscow'
+            }
+        });
 
-            Highcharts.stockChart('container', {
+        Highcharts.stockChart('container', {
 
-                rangeSelector: {
-                    selected: 5,
-                    buttons: [{
+            rangeSelector: {
+                selected: 5,
+                buttons: [{
                         type: 'day',
                         count: 1,
                         text: '1д'
@@ -70,32 +110,32 @@
                         type: 'all',
                         text: 'Все'
                     }]
-                },
+            },
 
-                title: {
-                    text: data.name + ' (' +  data.currency + ')'
-                },
-                plotOptions: {
-                    series: {
-                        label: {
-                            connectorAllowed: false
-                        }
+            title: {
+                text: data.name + ' (' + data.currency + ')'
+            },
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    }
                     //    pointStart: '2015.09.15 23:26:35'
-                    }
-                },
+                }
+            },
 
-                series: [
-                    {
-                        name: 'profit',
-                        data: data.data_chart,
-                        tooltip: {
-                            valueDecimals: 2
-                        }
+            series: [
+                {
+                    name: 'profit',
+                    data: data.data_chart,
+                    tooltip: {
+                        valueDecimals: 2
                     }
-                ]
-            });
-
+                }
+            ]
         });
 
     });
+
+});
 </script>
