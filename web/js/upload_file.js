@@ -5,87 +5,47 @@ $(function () {
         maxFileSize: 3145728,
         allowedTypes: 'html/*',
         fileName: 'file',
-        onBeforeUpload: function (id) {
-            updateFileStatus(id, 'default', 'Uploading...');
-        },
-        onNewFile: function (id, file) {
+//        onBeforeUpload: function (id) {
+//            updateFileStatus(id, 'default', 'Загрузка...');
+//        },
 
-          addFile('#demo-files', id, file);
+//        onNewFile: function (id, file) {
+//            addFile('#demo-files', id, file);
+//        },
 
-        },
-        onComplete: function () {
+//        onComplete: function () {
+//
+//        },
 
-        },
         onUploadProgress: function (id, percent) {
             var percentStr = percent + '%';
-
-            updateFileProgress(id, percentStr);
         },
-        onUploadSuccess: function (id, data) {
-            
 
-            updateFileProgress(id, '0%');
-            if (data.status == 'ok') {
-                
-                var input = $('<input>').attr({
-                    type: 'hidden',
-                    name: 'loadFile[]'
-                }).val(data.file_name);
-                $("#demo-files").append(input.get(0));
-                updateFileStatus(id, 'success', 'Успешно загружен');
+        onUploadSuccess: function (id, result) {
+            if (!result.hasErrors) {
+                addReport(result);
                 bsAlert.success('Файл успешно загружен');
+                drawChartByData(result.full_info);
             } else {
-                updateFileStatus(id, 'error', 'Ошибка загрузки');
-                bsAlert.error(data.message);
+                bsAlert.error(result.message);
             }
         },
         onUploadError: function (id, message) {
-           bsAlert.error("пожалуйста перегрузите страницу и попробуйте ещё раз");
+            bsAlert.error("Пожалуйста перегрузите страницу и попробуйте ещё раз");
         },
         onFileSizeError: function (file) {
-           bsAlert.error("файл с именем " + file.name + ' не должен превышать 3 Мб');
+            bsAlert.error("Файл не должен превышать 3 Мб");
         },
         onFileTypeError: function (file) {
-           bsAlert.error("файл с именем " + file.name + ' должен иметь расширение HTML');
+            bsAlert.error("Недопустимый формат файла. Должен иметь расширение html");
         }
 
     });
 
-
-    function updateFileStatus(i, status, message) {
-        $('#demo-file' + i).find('span.demo-file-status').html(message).addClass('demo-file-status-' + status);
-    }
-
-    function updateFileProgress(i, percent) {
-        $('#demo-file' + i).find('div.progress-bar').width(percent);
-
-        $('#demo-file' + i).find('span.sr-only').html(percent + ' Complete');
-    }
-
-    function addFile(id, i, file){
-
-		var template = '<div id="demo-file' + i + '">' +
-		                   '<span class="demo-file-id">#' + i + '</span> - ' + file.name + ' <span class="demo-file-size">(' + humanizeSize(file.size) + ')</span> - Status: <span class="demo-file-status">Waiting to upload</span>'+
-		                   '<div class="progress progress-striped active">'+
-		                       '<div class="progress-bar" role="progressbar" style="width: 0%;">'+
-		                           '<span class="sr-only">0% Complete</span>'+
-		                       '</div>'+
-		                   '</div>'+
-		               '</div>';
-
-		var i = $(id).attr('file-counter');
-		if (!i){
-			$(id).empty();
-
-			i = 0;
-		}
-
-		i++;
-
-		$(id).attr('file-counter', i);
-
-		$(id).prepend(template);
-
+    function addReport(data) {
+        $('#list-report-empty').css('display', 'none');
+        var html = "<div class='report' onclick='drawChartByNameFile(\"" + data.file_name + "\")'>" + data.full_info.name + "</div>";
+        $('#container-reports').append(html);
     }
 
 

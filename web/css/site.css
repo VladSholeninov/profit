@@ -124,3 +124,37 @@ a.desc:after {
     border-radius: 4px;
     height: 500px;
 }
+
+h1 {
+    font-size: 18px;
+    width: 100%;
+    text-align: center;
+    color: deepskyblue;
+    font-weight: 600;
+}
+
+.uploader{
+    margin-top: 0;
+    padding-top: 5px;
+}
+
+.report{
+    margin-top: 7px;
+    background-color: lavender;
+    cursor: pointer;
+    padding: 5px;
+    float: none;
+}
+
+.report:hover{
+    background-color: #D6D6EA;
+}
+
+.report .active {
+    background-color: #A5EACA;
+}
+
+#alert_placeholder {
+    top: 85%!important;
+    width: 350px!important;
+}

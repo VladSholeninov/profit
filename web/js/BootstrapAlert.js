@@ -6,7 +6,7 @@ BootstrapAlert = function () {
 
             $("#alert_placeholder").empty();
 
-        }, 5000);
+        }, 50000);
 
     };
 

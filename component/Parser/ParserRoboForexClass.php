@@ -79,9 +79,11 @@ class ParserRoboForexClass
      */
     public function getFullInfo()
     {
+        $name = mb_convert_encoding($this->getName(), 'utf-8');
         return [
             'date' => $this->getDate(),
-            'name' => $this->getName(),
+           // 'name' => $this->getName(),
+            'name' => $name,
             'currency' => $this->getCurrency(),
             'profit_data' => $this->getDataChartProfit(),
             'totally_data' => $this->getDataChartTotally()

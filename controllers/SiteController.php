@@ -54,41 +54,54 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
+     * Абработка запроса /site/index
      *
      * @return string
      */
     public function actionIndex()
     {
+        Yii::$app->view->title = 'Анализатор доходности';
+
         return $this->render('index');
     }
 
+    /**
+     * Обработка запроса получения данных для файла
+     * post запрос
+     * на входе название файла
+     * @return bool|string
+     */
     public function actionGetData()
     {
-        LogClass::cleare();
-        LogClass::saveLog('actionGetData');
+        $name_file = Yii::$app->request->post('name_file', null);
 
-        $parser = new ParserClass('statement1.html');
+        $parser = new ParserClass($name_file);
 
-        if ($parser->loadFile()) {
-            $report = $parser->getReportByType();
-
-            $data = $report->getFullInfo();
-
-            return json_encode($data);
+        if ($parser->isValid()) {
+            return Json::encode([
+                    'hasErrors' => false,
+                    'full_info' => $parser->getFullInfo()
+                ]);
         }
 
-        return false;
+        return Json::encode([
+                'hasErrors' => true,
+                'message' => $parser->getMessage()
+            ]);
     }
 
+    /**
+     * Обеспечивает загрузку файла
+     * @return string
+     */
     public function actionUploadFile()
     {
         $result_upload = [];
 
         if (empty($_FILES)) {
             $result_upload = [
-                'status'  => 'error',
-                'message' => 'не загружен файл'
+                'hasErrors'  => true,
+                'message' => 'Не загружен файл'
             ];
 
             return Json::encode($result_upload);
@@ -97,19 +110,34 @@ class SiteController extends Controller
         $obj_file_class = new FileClass();
         $obj_file_class->setAllowedExtension(['html', 'htm']);
         $obj_file_class->setAllowedSize(4);
-        $obj_file_class->setDestination($_SERVER['DOCUMENT_ROOT'] . "/web/files/");
+        $obj_file_class->setDestination(filter_input(INPUT_SERVER , 'DOCUMENT_ROOT') . "/web/files/");
 
         if ($obj_file_class->isValid()) {
             $obj_file_class->receive();
-            $result_upload['file_name'] = $obj_file_class->getNameFileOnServer();
-            $result_upload['status'] = 'ok';
+            $name_file = $obj_file_class->getNameFileOnServer();
+
+            $report = new ParserClass($name_file);
+            if (!$report->isValid() ){
+                $result_upload = [
+                    'hasErrors' => true,
+                    'message' => $report->getMessage()
+                ];
+            } else {
+                $result_upload = [
+                    'hasErrors' => false,
+                    'file_name' => $name_file,
+                    'full_info' => $report->getFullInfo()
+                ];
+            }
                
         } else {
-            $result_upload['status'] = 'error';
-            $result_upload['message'] = $obj_file_class->getMessage();
+            $result_upload = [
+                'hasErrors' => true,
+                'message' => $obj_file_class->getMessage()
+            ];
         }
-
-        return Json::encode($result_upload);
+var_dump($result_upload);die;
+        return json_encode($result_upload);
     }
 
 }
