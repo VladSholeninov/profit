@@ -1,0 +1,4 @@
+<div class='qq'>ыыы</div>
+<table>
+	<tr>Таблица</tr>
+</table>
