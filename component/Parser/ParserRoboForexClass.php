@@ -129,13 +129,11 @@ class ParserRoboForexClass
     public function getDataChartTotally()
     {
         $array_chart =[];
-
         $last_value = 0;
+
         foreach ($this->data as $date => $profit){
-            if (!empty($array_chart)){
-                $last_value += $last_value + [strtotime(str_replace('.', '-', $date))*1000, $profit];
-                $array_chart[] = $last_value;
-            }
+            $last_value += $profit;
+            $array_chart[] = [strtotime(str_replace('.', '-', $date))*1000, $last_value];
         }
 
         return $array_chart;

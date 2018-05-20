@@ -88,14 +88,14 @@
 
                 series: [
                     {
-                        name: 'profit',
-                        data: data.profit_data,
+                        name: 'balans',
+                        data: data.totally_data,
                         tooltip: {
                             valueDecimals: 2
                         }
                     },{
-                        name: 'баланс',
-                        data: data.totally_data,
+                        name: 'profit',
+                        data: data.profit_data,
                         tooltip: {
                             valueDecimals: 2
                         }
