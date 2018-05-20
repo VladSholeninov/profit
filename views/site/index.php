@@ -65,36 +65,35 @@
 
 $(function () {
 
-    $.getJSON('/site/get-data', function (data) {
-        // Create the chart
-        Highcharts.setOptions({
-            lang: {
-                loading: 'Загрузка...',
-                months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-                weekdays: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
-                shortMonths: ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сент', 'Окт', 'Нояб', 'Дек'],
-                exportButtonTitle: "Экспорт",
-                printButtonTitle: "Печать",
-                rangeSelectorFrom: "С",
-                rangeSelectorTo: "По",
-                rangeSelectorZoom: "Период",
-                downloadPNG: 'Скачать PNG',
-                downloadJPEG: 'Скачать JPEG',
-                downloadPDF: 'Скачать PDF',
-                downloadSVG: 'Скачать SVG',
-                downloadCSV: 'Скачать CSV',
-                printChart: 'Напечатать график'
-            },
-            time: {
-                timezone: 'Europe/Moscow'
-            }
-        });
+     $.getJSON('/site/get-data', function (data) {
+            // Create the chart
+            Highcharts.setOptions({
+                lang: {
+                    loading: 'Загрузка...',
+                    months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                    weekdays: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
+                    shortMonths: ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сент', 'Окт', 'Нояб', 'Дек'],
+                    exportButtonTitle: "Экспорт",
+                    printButtonTitle: "Печать",
+                    rangeSelectorFrom: "С",
+                    rangeSelectorTo: "По",
+                    rangeSelectorZoom: "Период",
+                    downloadPNG: 'Скачать PNG',
+                    downloadJPEG: 'Скачать JPEG',
+                    downloadPDF: 'Скачать PDF',
+                    downloadSVG: 'Скачать SVG',
+                    printChart: 'Напечатать график'
+                },
+                time: {
+                    timezone: 'Europe/Moscow'
+                }
+            });
 
-        Highcharts.stockChart('container', {
+            Highcharts.stockChart('container', {
 
-            rangeSelector: {
-                selected: 5,
-                buttons: [{
+                rangeSelector: {
+                    selected: 5,
+                    buttons: [{
                         type: 'day',
                         count: 1,
                         text: '1д'
@@ -110,32 +109,47 @@ $(function () {
                         type: 'all',
                         text: 'Все'
                     }]
-            },
+                },
 
-            title: {
-                text: data.name + ' (' + data.currency + ')'
-            },
-            plotOptions: {
-                series: {
-                    label: {
-                        connectorAllowed: false
+                title: {
+                    text: data.name + ' (' +  data.currency + ')'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    labels: {
+                        formatter: function() {
+                            return moment(this.value).format("D.M.YY HH:MM");
+                        }
                     }
-                    //    pointStart: '2015.09.15 23:26:35'
-                }
-            },
+                },
+                navigation: {
+                    buttonOptions: {
+                        theme: {
+                            style: {
+                                color: '#E0E0E0'
+                            }
+                        }
+                    }
+                },
 
-            series: [
-                {
-                    name: 'profit',
-                    data: data.data_chart,
-                    tooltip: {
-                        valueDecimals: 2
+                series: [
+                    {
+                        name: 'Баланс',
+                        data: data.totally_data,
+                        tooltip: {
+                            valueDecimals: 2
+                        }
+                    },{
+                        name: 'profit',
+                        data: data.profit_data,
+                        tooltip: {
+                            valueDecimals: 2
+                        }
                     }
-                }
-            ]
+                ]
+            });
+
         });
-
-    });
 
 });
 </script>
