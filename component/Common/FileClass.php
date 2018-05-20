@@ -1,10 +1,10 @@
 <?php
 
-namespace app\component\Form;
+namespace app\component\Common;
 
 class FileClass
 {
-    const TAIL = '_1doba_in_ua';
+    const TAIL = '';
     private $array_document_extension = array('doc', 'docx', 'xlsx', 'xls', 'rar', 'zip', 'pdf');
     private $array_image_extension = array('png', 'jpg', 'bmp', 'gif', 'tif', 'tiff', 'jpeg', 'ico');
     public $files = array();

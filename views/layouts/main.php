@@ -23,8 +23,10 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
 
     <?php
+	
         $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js');
         $this->registerJsFile('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js');
+        $this->registerJsFile('/web/js/BootstrapAlert.js');
 
         $this->head()
     ?>
@@ -43,6 +45,9 @@ AppAsset::register($this);
     </div>
 </footer>
 
+<!--  шаблон для уведомления bsalert  -->
+<div id="alert_placeholder"></div>
+		
 <?php $this->endBody() ?>
 </body>
 </html>
