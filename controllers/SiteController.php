@@ -136,7 +136,7 @@ class SiteController extends Controller
                 'message' => $obj_file_class->getMessage()
             ];
         }
-var_dump($result_upload);die;
+
         return json_encode($result_upload);
     }
 
